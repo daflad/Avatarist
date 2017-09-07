@@ -79,8 +79,12 @@ func (a *Avatar) BlankCanvas() {
 //Draw the random avatar
 func (a *Avatar) Draw() {
 	var col color.RGBA
-	for y := a.Img.Rect.Min.Y + a.BorderSize; y < a.Img.Rect.Max.Y-a.BorderSize; y++ {
-		for x := a.Img.Rect.Min.X + a.BorderSize; x < a.Img.Rect.Max.X-a.BorderSize; x++ {
+	top, bottom, left, right := a.InnerDimentions()
+	//Scan image & update pixel colous
+	//find corner of block and set the colour
+	//change colour when new block is found
+	for y := top; y < bottom; y++ {
+		for x := left; x < right; x++ {
 			if x%a.BlockSize == 0 {
 				if y%a.BlockSize == 0 {
 					col = a.Colours[rand.Intn(a.NumCols)]
@@ -96,6 +100,15 @@ func (a *Avatar) Draw() {
 			a.Img.Set(x, y, col)
 		}
 	}
+}
+
+//InnerDimentions of randomised avatar
+func (a *Avatar) InnerDimentions() (int, int, int, int) {
+	top := a.Img.Rect.Min.Y + a.BorderSize
+	bottom := a.Img.Rect.Max.Y - a.BorderSize
+	left := a.Img.Rect.Min.X + a.BorderSize
+	right := a.Img.Rect.Max.X - a.BorderSize
+	return top, bottom, left, right
 }
 
 //Write the file to disk
