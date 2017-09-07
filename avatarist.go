@@ -8,7 +8,7 @@ import (
 
 func main() {
 	avatar := initAvatar(200, 200, 20, 20, 2)
-	fmt.Println(avatar)
+	fmt.Println(avatar.String())
 }
 
 //Avatar The paramaters required to ceeate a random Avatar
@@ -36,7 +36,7 @@ func initAvatar(width, height, blockSize, borderSize, numCols int) Avatar {
 }
 
 func (a *Avatar) String() string {
-	return fmt.Sprintf("Width \t:: %v\nHeight \t:: %v\nBlockSize \t:: %v\n"+
+	return fmt.Sprintf("Width \t\t:: %v\nHeight \t\t:: %v\nBlockSize \t:: %v\n"+
 		"BorderSize \t:: %v\nNumCols \t:: %v\n", a.Width, a.Height, a.BlockSize,
 		a.BorderSize, a.NumCols)
 }
