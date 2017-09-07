@@ -17,6 +17,7 @@ func main() {
 	avatar.GenerateRandomColours(98, 179, 229, 255, 175, 28)
 	fmt.Println(avatar.String())
 	avatar.BlankCanvas()
+	avatar.Draw()
 	avatar.Write()
 }
 
@@ -75,6 +76,29 @@ func (a *Avatar) BlankCanvas() {
 	}
 }
 
+//Draw the random avatar
+func (a *Avatar) Draw() {
+	var col color.RGBA
+	for y := a.Img.Rect.Min.Y + a.BorderSize; y < a.Img.Rect.Max.Y-a.BorderSize; y++ {
+		for x := a.Img.Rect.Min.X + a.BorderSize; x < a.Img.Rect.Max.X-a.BorderSize; x++ {
+			if x%a.BlockSize == 0 {
+				if y%a.BlockSize == 0 {
+					col = a.Colours[rand.Intn(a.NumCols)]
+				} else {
+					if y > a.Img.Rect.Min.Y {
+						r, g, b, a := a.Img.At(x, y-1).RGBA()
+						col = color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)}
+					} else {
+						col = a.Colours[rand.Intn(a.NumCols)]
+					}
+				}
+			}
+			a.Img.Set(x, y, col)
+		}
+	}
+}
+
+//Write the file to disk
 func (a *Avatar) Write() {
 	a.Name = a.Name + ".png"
 	file, err := os.Create(a.Name)
