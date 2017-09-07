@@ -4,19 +4,25 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/png"
+	"log"
 	"math/rand"
+	"os"
 	"time"
 )
 
 func main() {
-	avatar := initAvatar(200, 200, 20, 20, 2)
+	avatar := initAvatar("MyFirstAvatar", 200, 200, 20, 20, 2)
 	fmt.Println(avatar.String())
 	avatar.GenerateRandomColours(98, 179, 229, 255, 175, 28)
 	fmt.Println(avatar.String())
+	avatar.BlankCanvas()
+	avatar.Write()
 }
 
 //Avatar The paramaters required to ceeate a random Avatar
 type Avatar struct {
+	Name       string
 	Width      int
 	Height     int
 	BlockSize  int
@@ -28,8 +34,9 @@ type Avatar struct {
 }
 
 //Set avatar sizes and init the image & colours
-func initAvatar(width, height, blockSize, borderSize, numCols int) Avatar {
+func initAvatar(name string, width, height, blockSize, borderSize, numCols int) Avatar {
 	var A Avatar
+	A.Name = name
 	A.Width = width
 	A.Height = height
 	A.BlockSize = blockSize
@@ -57,4 +64,23 @@ func (a *Avatar) GenerateRandomColours(red, green, blue, alpha, offset, randomAm
 		al := uint8(255)
 		a.Colours = append(a.Colours, color.RGBA{r, g, b, al})
 	}
+}
+
+//BlankCanvas cover the image with the BaseColour
+func (a *Avatar) BlankCanvas() {
+	for y := a.Img.Rect.Min.Y; y < a.Img.Rect.Max.Y; y++ {
+		for x := a.Img.Rect.Min.X; x < a.Img.Rect.Max.X; x++ {
+			a.Img.Set(x, y, a.BaseColour)
+		}
+	}
+}
+
+func (a *Avatar) Write() {
+	a.Name = a.Name + ".png"
+	file, err := os.Create(a.Name)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	png.Encode(file, a.Img)
 }
