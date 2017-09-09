@@ -55,6 +55,7 @@ func (a *Avatar) String() string {
 }
 
 //GenerateRandomColours used in avatar.
+//Rnadom colours from a base colour
 func (a *Avatar) GenerateRandomColours(red, green, blue, alpha, offset, randomAmount int) {
 	a.BaseColour = color.RGBA{uint8(red), uint8(green), uint8(blue), uint8(alpha)}
 	rand.Seed(time.Now().Unix())
@@ -78,6 +79,7 @@ func (a *Avatar) BlankCanvas() {
 
 //Draw the random avatar
 func (a *Avatar) Draw() {
+	//The colour to draw the current pixel
 	var col color.RGBA
 	top, bottom, left, right := a.InnerDimentions()
 	//Scan image & update pixel colous
