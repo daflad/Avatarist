@@ -35,8 +35,7 @@ type Avatar struct {
 }
 
 //Set avatar sizes and init the image & colours
-func initAvatar(name string, width, height, blockSize, borderSize, numCols int) Avatar {
-	var A Avatar
+func initAvatar(name string, width, height, blockSize, borderSize, numCols int) (A Avatar) {
 	A.Name = name
 	A.Width = width
 	A.Height = height
@@ -45,7 +44,7 @@ func initAvatar(name string, width, height, blockSize, borderSize, numCols int) 
 	A.NumCols = numCols
 	A.Img = image.NewRGBA(image.Rect(0, 0, A.Width, A.Height))
 	A.Colours = make([]color.RGBA, 0)
-	return A
+	return
 }
 
 func (a *Avatar) String() string {
@@ -68,7 +67,8 @@ func (a *Avatar) GenerateRandomColours(red, green, blue, alpha, offset, randomAm
 	}
 }
 
-//BlankCanvas cover the image with the BaseColour
+//BlankCanvas traverse each pixel in the image
+// and set that pixel to the BaseColour
 func (a *Avatar) BlankCanvas() {
 	for y := a.Img.Rect.Min.Y; y < a.Img.Rect.Max.Y; y++ {
 		for x := a.Img.Rect.Min.X; x < a.Img.Rect.Max.X; x++ {
@@ -105,12 +105,12 @@ func (a *Avatar) Draw() {
 }
 
 //InnerDimentions of randomised avatar
-func (a *Avatar) InnerDimentions() (int, int, int, int) {
-	top := a.Img.Rect.Min.Y + a.BorderSize
-	bottom := a.Img.Rect.Max.Y - a.BorderSize
-	left := a.Img.Rect.Min.X + a.BorderSize
-	right := a.Img.Rect.Max.X - a.BorderSize
-	return top, bottom, left, right
+func (a *Avatar) InnerDimentions() (top, bottom, left, right int) {
+	top = a.Img.Rect.Min.Y + a.BorderSize
+	bottom = a.Img.Rect.Max.Y - a.BorderSize
+	left = a.Img.Rect.Min.X + a.BorderSize
+	right = a.Img.Rect.Max.X - a.BorderSize
+	return
 }
 
 //Write the file to disk
